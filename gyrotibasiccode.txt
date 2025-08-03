@@ -1,0 +1,176 @@
+Define argumentnotfound(reason)=
+Prgm
+:©Gyro error argument not found.
+:Disp "Error detected, argument not found. reason:"
+:Disp reason
+:Stop
+:EndPrgm
+
+Define cfgerror(reason)=
+Prgm
+:©Gyro cfg error.
+:Disp "Error detected, cfg error. reason:"
+:Disp reason
+:Stop
+:EndPrgm
+
+Define ioerror(reason)=
+Prgm
+:©Gyro IO Error.
+:Disp "Error detected, IO error. reason:"
+:Disp reason
+:Stop
+:EndPrgm
+
+Define moderror(reason)=
+Prgm
+:©Gyro mod error.
+:Disp "Error detected, mod error. reason:"
+:Disp reason
+:Stop
+:EndPrgm
+
+Define unknownerror(reason)=
+Prgm
+:©Gyro unknown error.
+:Disp "Unknown error detected, reason:"
+:Disp reason
+:Stop
+:EndPrgm
+
+Define g.kernel_quit()=
+Prgm
+:©Gyro quit function.
+:Stop
+:EndPrgm
+
+Define g.kernel_errchk(errortype,reason,forceraise)=
+Prgm
+:If erxt=1 or forceraise=true Then
+:  If forceraise=false Then:g.kernel_cout("debug","Error or warning encounted,stopped engine.")
+:  Else:g.kernel_cout("debug","Forcely raised an error!"):EndIf
+:  If errortype=1 Then:argumentnotfound(reason)
+:  ElseIf errortype=2 Then:ioerror(reason)
+:  ElseIf errortype=3 Then:cfgerror(reason)
+:  ElseIf errortype=4 Then:moderror(reason)
+:  ElseIf errortype=5 Then:gamerror(reason)
+:  Else:unknownerror(reason):EndIf
+:EndIf
+:EndPrgm
+
+Define g.kernel_newwind(x,y,maxx,maxy)=
+Prgm
+:SetWindow x,y,maxx,maxy
+:SetColor 0,0,0
+:FillRect 0,0,500,300
+:g.actionui_dispui(0,0,9)
+:UseBuffer 
+:EndPrgm
+
+Define g.kernel_gmlncher()=
+Prgm
+:g.kernel_newwind(scgx,scgy,scgmx,scgmy)
+:If novid≠true Then:g.kernel_opening():EndIf
+:g.prgm_main()
+:EndPrgm
+
+Define g.kernel_cout(couttype,texts)=
+Prgm
+:If couttype="msg" Then
+:  Disp texts
+:ElseIf couttype="info" Then
+:  Disp "[INFO]"&texts
+:ElseIf couttype="warn" Then
+:  Disp "[WARN]"&texts
+:ElseIf couttype="error" Then
+:  Disp "[ERROR]"&texts
+:ElseIf couttype="fatal" Then
+:  Disp "[FATAL]"&texts
+:ElseIf couttype="debug" Then
+:  Disp "[DEBUG]"&texts
+:ElseIf couttype="console" Then
+:  Disp "[CONSOLE]"&texts
+:ElseIf couttype="preload" Then
+:  Disp "[PRE-LOAD]"&texts
+:ElseIf couttype="io" Then
+:  Disp "[IO]"&texts
+:Else
+:  g_kernel_errchk(1,"Did not allocate a valid cout type.")
+:EndIf
+:EndPrgm
+
+Define g.kernel_console()=
+Prgm
+:©Gyro kernel console.
+:Local g
+:g.kernel_cout("preload","Starting console.")
+:While true
+:  RequestStr "Command:",g,0
+:  If g="run" Then
+:    g.kernel_cout("preload","Running engine.")
+:    g.prgm_main()
+:    Exit
+:  ElseIf g="stop" Then
+:    g.kernel_quit()
+:  ElseIf g="scuptoggle" Then
+:    If dr=false Then:dr:=true:g.kernel_cout("console","Enabled."):Else:dr:=false:g.kernel_cout("console","Disabled"):EndIf
+:  ElseIf g="setgeomet" Then
+:    Try
+:      Request "geomet x min:"*scgx,0
+:      Request "geomet y min:"*scgy,0
+:      Request "geomet x max:"*scgmx,0
+:      Request "getmet y max:"*scgmy,0
+:      g.kernel_cout("info","Resolution set to:"&scrgx&","&scrgy&","&scrgmx&","&scrgmy)
+:    Else
+:      g.kernel_cout("error","Setting was failed.")
+:      g.kernel_errchk(3,"Bad arguments.")
+:    EndTry
+:    ElseIf g="getcfgs" Then
+:      g.kernel_cout("msg","exit on error:"&erxt)
+:      g.kernel_cout("msg","novid:"&novid)
+:      g.kernel_cout("msg","log output on screen draw:"&dr)
+:      g.kernel_cout("msg","Resolution:"&scrgx&","&scrgy&","&scrgmx&","&scrgmy)
+:    ElseIf g="forceexitonerror" Then
+:      If erxt=1 Then
+:        erxt:=0
+:        g.kernel_cout("console","Exit when error disabled.")
+:      Else
+:        erxt:=1
+:        g.kernel_cout("console","Exit when error enabled.")
+:      EndIf
+:    ElseIf g="version" Then:
+:      g.kernel_cout("msg","Gyro 2D Gaming Engine.")
+:      g.kernel_cout("msg",gamever)
+:      g.kernel_cout("msg","Debugged in:"&debugdate)
+:      g.kernel_cout("msg","Made by Alex_Nute aka axnut123.")
+:      g.kernel_cout("msg","Made in China.")
+:      g.kernel_cout("msg","Engine built on TI-Nspire BASIC language.")
+:    ElseIf g="deletesave" Then
+:      g.io_delete()
+:    ElseIf g="loadgame" Then
+:      g.kernel_cout("msg","Notice: load and save does not need function anymore.")
+:    ElseIf g="dev" Then
+:      If dev=false Then:dev:=true:g.kernel_cout("console","Dev mode enabled."):Else:dev:=false:g.kernel_cout("console,""Dev mode disabled."):EndIf
+:    ElseIf g="help" Then
+:      g.kernel_cout("msg","Usage: help <1/2/3/4>. example: help 1 for page 1.")
+:    ElseIf g="help 1" Then
+:      g.kernel_cout("msg","Gyro engine help page 1:")
+:      g.kernel_cout("msg","run:start engine.")
+:      g.kernel_cout("msg","stop:quit console.")
+:      g.kernel_cout("msg","help:get command help.")
+:      g.kernel_cout("msg","version:get version.")
+:      g.kernel_cout("msg","dev:toggle developer mode.")
+:      g.kernel_cout("msg","forceexitonerror:stop engine when encount any error or warn.")
+:      g.kernel_cout("msg","setgeomet:set a new resolution for engine.")
+:      g.kernel_cout("msg","deletesave:delete saved game.")
+:      g.kernel_cout("msg","loadgame:unused command, does not do anything.")
+:    Else
+:      g.kernel_cout("msg","Unknown command, use help <page> to get help.")
+:      EndIf
+:EndWhile
+:EndPrgm
+
+Define g.prgm_main()=
+Prgm
+:
+:EndPrgm
