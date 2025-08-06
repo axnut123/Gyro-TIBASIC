@@ -46,6 +46,7 @@ Prgm
 
 Define g.kernel_errchk(errortype,reason,forceraise)=
 Prgm
+:©Gyro error check.
 :If erxt=1 or forceraise=true Then
 :  If forceraise=false Then:g.kernel_cout("debug","Error or warning encounted,stopped engine.")
 :  Else:g.kernel_cout("debug","Forcely raised an error!"):EndIf
@@ -60,6 +61,7 @@ Prgm
 
 Define g.kernel_newwind(x,y,maxx,maxy)=
 Prgm
+:©Gyro create window.
 :SetWindow x,y,maxx,maxy
 :SetColor 0,0,0
 :FillRect 0,0,500,300
@@ -69,6 +71,7 @@ Prgm
 
 Define g.kernel_gmlncher()=
 Prgm
+:©Gyro game launcher.
 :g.kernel_newwind(scgx,scgy,scgmx,scgmy)
 :If novid≠true Then:g.kernel_opening():EndIf
 :g.prgm_main()
@@ -76,6 +79,7 @@ Prgm
 
 Define g.kernel_cout(couttype,texts)=
 Prgm
+©Gyro console output.
 :If couttype="msg" Then
 :  Disp texts
 :ElseIf couttype="info" Then
@@ -168,6 +172,71 @@ Prgm
 :      g.kernel_cout("msg","Unknown command, use help <page> to get help.")
 :      EndIf
 :EndWhile
+:EndPrgm
+
+Define g.unifx_bulflrs(btp)=
+Prgm
+©Gyro UniFX, bullet flares.
+:If btp=1 Then
+:  SetColor 240,240,5
+:  DrawLine playerx,playery-20,playerx,playery-45
+:ElseIf btp=2 Then
+:  SetColor 240,240,5
+:  DrawLine playerx,playery-20,playerx,playery-85
+:ElseIf btp=3 Then
+:  SetColor 210,210,210
+:  FillArc playerx-19,playery-9,50,30,30,100
+:ElseIf btp=4 Then
+:  SetColor 255,150,10
+:  SetPen 3,1
+:  DrawLine playerx,playery,playerx,playery-35
+:  SetPen 1,1
+:ElseIf btp=5 Then
+:  SetColor 240,240,0
+:  DrawLine playerx,playery+20,playerx,playery+45
+:ElseIf btp=6 Then
+:  SetColor 210,210,210
+:  DrawLine playerx,playery+20,playerx,playery+85
+:ElseIf btp=7 Then
+:  SetColor 210,210,210
+:  FillArc playerx-19,playery-9,50,30,−30,−100
+:ElseIf btp=8 Then
+:  SetColor 255,150,10
+:  SetPen 3,1
+:  DrawLine playerx,playery,playerx,playery+35
+:  SetPen 1,1
+:ElseIf btp=9 Then
+:  SetColor 240,240,0
+:  DrawLine playerx-20,playery,playerx-45,playery
+:ElseIf btp=10 Then
+:  SetColor 240,240,0
+:  DrawLine playerx-20,playery,playerx-85,playery
+:ElseIf btp=11 Then
+:  SetColor 210,210,210
+:  FillArc playerx-19,playery-9,50,30,−120,−90
+:ElseIf btp=12 Then
+:  SetColor 255,150,10
+:  SetPen 3,1
+:  DrawLine playerx,playery,playerx-35,playery
+:  SetPen 1,1
+:ElseIf btp=13 Then
+:  SetColor 240,240,0
+:  DrawLine playerx+20,playery,playerx+45,playery
+:ElseIf btp=14 Then
+:  SetColor 240,240,0
+:  DrawLine playerx+20,playery,playerx+85,playery
+:ElseIf btp=15 Then
+:  SetColor 210,210,210
+:  FillArc playerx-19,playery-9,50,30,−30,100
+:ElseIf btp=16 Then
+:  SetColor 255,150,0
+:  SetPen 3,1
+:  DrawLine playerx,playery,playerx+35,playery
+:  SetPen 1,1
+:Else
+:  g.kernel_cout("error","Cannot find type of the VFX that dedicated.")
+:  g.kernel_errchk(1,"VFX type not found.")
+:EndIf
 :EndPrgm
 
 Define g.prgm_main()=
